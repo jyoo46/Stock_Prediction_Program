@@ -1,7 +1,7 @@
 # Stock_Prediction_Program
 Use historical data of stock price from top tech firms and use regression to build prediction model and analyze trend to help decision in stock market.
 
-Historcal Stock Market Data retrieved from https://finance.yahoo.com
+Historical Stock Market Data retrieved from https://finance.yahoo.com
 
 List of Fimrs to be analyzed:
 Apple
