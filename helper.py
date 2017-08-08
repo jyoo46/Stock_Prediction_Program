@@ -1,2 +1,0 @@
-def typecast(str):
-    if 
