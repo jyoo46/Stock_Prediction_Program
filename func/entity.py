@@ -56,9 +56,10 @@ class Firm():
                     self.volume = np.append(self.volume,float(row[6]))
 
         self.dateformatted = np.array([dt.datetime.strptime(d,'%Y-%m-%d').date() for d in self.date])
-        self.feature = [self.dateformatted, self.p_open, self.p_high, self.p_low, self.p_close, self.p_adj, self.volume]
+        self.feature = np.array([self.dateformatted, self.p_open, self.p_high, self.p_low, self.p_close, self.p_adj, self.volume])
 
         return
+
 
     def plot(self):
         plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
@@ -85,8 +86,9 @@ class Industry():
         self.p_close = np.array([])
         self.p_adj = np.array([])
         self.volume = np.array([])
-        self.feature = [self.date, self.p_open, self.p_high, self.p_low, self.p_close, self.p_adj, self.volume]
+        self.feature = np.array([self.date, self.p_open, self.p_high, self.p_low, self.p_close, self.p_adj, self.volume])
         self.calcavg()
+
 
     def calcavg(self):
         idx = len(self.date)
