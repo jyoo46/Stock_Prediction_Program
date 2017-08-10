@@ -13,15 +13,27 @@ parpath = os.path.abspath(os.curdir)
 class Firm():
     def __init__(self, name, filename):
         self.name = name
+        self.filename = filename
+
         self.date = np.array([])
         self.dateformatted = np.array([])
-        self.p_open = np.array([])
-        self.p_high = np.array([])
-        self.p_low = np.array([])
-        self.p_close = np.array([])
-        self.p_adj = np.array([])
+
+        self.open = np.array([])
+        self.high = np.array([])
+        self.low = np.array([])
+        self.close = np.array([])
+        self.adj = np.array([])
         self.volume = np.array([])
-        self.filename = filename
+        self.feature = []
+
+        self.openT = np.array([])
+        self.highT = np.array([])
+        self.lowT = np.array([])
+        self.closeT = np.array([])
+        self.adjT = np.array([])
+        self.volumeT = np.array([])
+        self.trend = []
+
         self.readcsv()
 
     # Read or Update data
@@ -36,11 +48,11 @@ class Firm():
                         dateidx = 1
                         continue
                     self.date = np.append(self.date, row[0])
-                    self.p_open = np.append(self.p_open, float(row[1]))
-                    self.p_high = np.append(self.p_high, float(row[2]))
-                    self.p_low = np.append(self.p_low, float(row[3]))
-                    self.p_close = np.append(self.p_close, float(row[4]))
-                    self.p_adj = np.append(self.p_adj, float(row[5]))
+                    self.open = np.append(self.open, float(row[1]))
+                    self.high = np.append(self.high, float(row[2]))
+                    self.low = np.append(self.low, float(row[3]))
+                    self.close = np.append(self.close, float(row[4]))
+                    self.adj = np.append(self.adj, float(row[5]))
                     self.volume = np.append(self.volume, float(row[6]))
             # Update existing data
             else:
@@ -49,17 +61,18 @@ class Firm():
                         break
                 for row in reader:
                     self.date = np.append(self.date, row[0])
-                    self.p_open = np.append(self.p_open, float(row[1]))
-                    self.p_high = np.append(self.p_high, float(row[2]))
-                    self.p_low = np.append(self.p_low, float(row[3]))
-                    self.p_close = np.append(self.p_close, float(row[4]))
-                    self.p_adj = np.append(self.p_adj, float(row[5]))
+                    self.open = np.append(self.open, float(row[1]))
+                    self.high = np.append(self.high, float(row[2]))
+                    self.low = np.append(self.low, float(row[3]))
+                    self.close = np.append(self.close, float(row[4]))
+                    self.adj = np.append(self.adj, float(row[5]))
                     self.volume = np.append(self.volume, float(row[6]))
 
         self.dateformatted = np.array(
             [dt.datetime.strptime(d, '%Y-%m-%d').date() for d in self.date])
-        self.feature = np.array([self.dateformatted, self.p_open, self.p_high,
-                                 self.p_low, self.p_close, self.p_adj, self.volume])
+
+        self.feature = [self.open, self.high,
+                        self.low, self.close, self.adj, self.volume]
 
         return
 
@@ -67,8 +80,6 @@ class Firm():
         plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
         plt.gca().xaxis.set_major_locator(mdates.DayLocator())
         plt.figure(figsize=(40, 10))
-        # plt.xlabel("Date(YYYY-MM-DD)")
-        # plt.ylabel("Dollars ($)")
         plt.ticklabel_format(style='sci', useLocale=False)
         plt.plot(self.feature[0], self.feature[1], 'r')
         plt.gcf().autofmt_xdate()
@@ -76,27 +87,37 @@ class Firm():
 
         return
 
+    def calcTrend(self):
+        self.trend = [self.openT, self.highT, self.lowT,
+                      self.closeT, self.adjT, self.volumeT]
+
+        for fidx in range(0, len(self.feature)):
+            for idx in range(1, len(self.feature[fidx])):
+                diff = self.feature[fidx][idx] - self.feature[fidx][idx - 1]
+                perdiff = diff / self.feature[fidx][idx]
+                self.trend[fidx] = np.append(self.trend[fidx], perdiff)
+
 
 class Industry():
     def __init__(self, name, array):
         self.name = name
         self.list = array
-        self.date = array[0].feature[0]
-        self.p_open = np.array([])
-        self.p_high = np.array([])
-        self.p_low = np.array([])
-        self.p_close = np.array([])
-        self.p_adj = np.array([])
+        self.date = array[0].dateformatted
+        self.open = np.array([])
+        self.high = np.array([])
+        self.low = np.array([])
+        self.close = np.array([])
+        self.adj = np.array([])
         self.volume = np.array([])
-        self.feature = np.array(
-            [self.date, self.p_open, self.p_high, self.p_low, self.p_close, self.p_adj, self.volume])
+        self.feature = [self.open, self.high, self.low,
+                        self.close, self.adj, self.volume]
         self.calcavg()
 
     def calcavg(self):
         idx = len(self.date)
         num = len(self.list)
         for day in range(0, idx):
-            for feat in range(1, 7):
+            for feat in range(0, len(self.feature)):
                 total = 0
                 for firm in self.list:
                     total += firm.feature[feat][day]
