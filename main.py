@@ -7,7 +7,6 @@ sys.path.append(os.path.abspath(os.curdir) + '/func/')
 from entity import *
 from regmodel import *
 
-# from statsmodels.formula.api import ols
 Apple     = Firm("Apple", "AAPL")
 Adobe     = Firm("Adobe", "ADBE")
 Amazon    = Firm("Amazon", "AMZN")
@@ -24,9 +23,16 @@ Firms     = [Apple, Adobe, Amazon, Facebook, Google, Intel, Microsoft, Nvidia, Q
 
 IT        = Industry("IT", Firms)
 
-model = regModel(Firms, 0, 0)
-pred = predNext(Firms, model)
-err = calcError(Firms, pred, 0, 0)
-suc, fail = checkTrendPrediction(Firms, pred, 0, 0)
+models = []
+for fidx in range(0, len(Firms)):
+    temp = []
+    for vidx in range(0, len(Firms[fidx].feature)):
+        model = regModel(Firms, fidx, vidx)
+        temp.append(model)
+    models.append(temp)
 
-print(suc, fail)
+pred      = predNext(Firms, models)
+
+print(pred)
+
+Firms[0].plot(0, 0, 1000)

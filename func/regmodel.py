@@ -33,6 +33,23 @@ def predNext(Firms, model):
 
     return prediction
 
+# def predNext(Firms, models):
+#     prediction = []
+#     for fidx in range(0, len(Firms)):
+#         prediction_firm = []
+#         for midx in range(0, len(models[fidx])):
+#             pred = 0
+#             for fi in range(0, len(Firms)):
+#                 for fe in range(0, len(Firms[fi].feature)):
+#                     if (models[fidx][midx].pvalues[0] < 0.05):
+#                         pred += models[fidx][midx].params[0]
+#                     if (models[fidx][midx].pvalues[6 * fi + fe + 1] < 0.05):
+#                         pred += Firms[fi].prediction[fe][-1] * models[fidx][midx].params[6 * fi + fe + 1]
+#             prediction_firm.append(pred)
+#         prediction.append(prediction_firm)
+#
+#     return prediction
+
 
 def calcError(Firms, prediction, firmidx, featidx):
     totalerr = 0

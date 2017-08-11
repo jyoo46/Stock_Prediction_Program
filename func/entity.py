@@ -71,17 +71,18 @@ class Firm():
         self.dateformatted = np.array(
             [dt.datetime.strptime(d, '%Y-%m-%d').date() for d in self.date])
 
-        self.feature = [self.open, self.high,
-                        self.low, self.close, self.adj, self.volume]
+        self.feature = np.array([self.open, self.high, self.low, self.close, self.adj, self.volume])
+
+        self.prediction = np.array([self.open, self.high, self.low, self.close, self.adj, self.volume])
 
         return
 
-    def plot(self):
+    def plot(self, fidx, idx, idx2):
         plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
         plt.gca().xaxis.set_major_locator(mdates.DayLocator())
         plt.figure(figsize=(40, 10))
         plt.ticklabel_format(style='sci', useLocale=False)
-        plt.plot(self.feature[0], self.feature[1], 'r')
+        plt.plot(self.dateformatted[idx:idx2], self.feature[fidx][idx:idx2], 'r')
         plt.gcf().autofmt_xdate()
         plt.savefig("test.png", linestyle='solid')
 
