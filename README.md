@@ -1,5 +1,5 @@
 # Stock_Prediction_Program
-Use historical data of stock price from top tech firms and use regression to build prediction model and analyze trend to help decision in stock market.<br />
+Use historical data of stock price from top tech firms and use multiple linear regression to build prediction model that analyzes trend to help decision in stock market.<br />
 
 Historical Stock Market Data retrieved from https://finance.yahoo.com <br />
 
