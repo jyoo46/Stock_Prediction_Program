@@ -4,7 +4,7 @@ import sys
 import os.path
 sys.path.append(os.path.abspath(os.curdir) + '/func/')
 
-from entity import *
+from classes import *
 from regmodel import *
 
 Apple     = Firm("Apple", "AAPL")
@@ -31,8 +31,23 @@ for fidx in range(0, len(Firms)):
         temp.append(model)
     models.append(temp)
 
-pred      = predNext(Firms, models)
 
-print(pred)
+print(models[0][0].summary())
+predNext(Firms, models)
+Apple.plot(0, 0, 1256)
 
-Firms[0].plot(0, 0, 1000)
+# x = np.array([])
+# x2 = np.array([])
+# y = np.array([])
+#
+# for idx in range(1000, 1256):
+#     print(Apple.prediction[0][idx] - Apple.feature[0][idx], idx-1000)
+    # x = np.append(x, idx-1000)
+    # x2 = np.append(x2, (idx-1000)**2)
+    # y = np.append(y, Apple.prediction[0][idx] - Apple.feature[0][idx])
+
+# # Firms[0].plot(0, 0, 1256)
+# x = np.vstack((x, x2))
+# x = sm.add_constant(x.T)
+# res = sm.OLS(y, x).fit()
+# print(res.summary())
